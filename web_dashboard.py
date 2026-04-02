@@ -12,13 +12,26 @@ import aiosqlite
 
 app = FastAPI(title="Creierosu v9 Ultimate Dashboard")
 
-# Ensure assets directory exists for stock uploads
-if not os.path.exists("assets"):
-    os.makedirs("assets")
+from fastapi.responses import FileResponse
+from config import DB_PATH, ASSETS_DIR
 
-app.mount("/assets", StaticFiles(directory="assets"), name="assets")
+# Ensure assets directory exists for stock uploads
+if not os.path.exists(ASSETS_DIR):
+    os.makedirs(ASSETS_DIR)
+
+# Custom route to ONLY allow authenticated admins to see product images
+@app.get("/assets/{filename}")
+async def get_secure_asset(request: Request, filename: str):
+    if not is_authenticated(request):
+        return JSONResponse(status_code=403, content={"error": "Access Denied"})
+    
+    file_path = os.path.join(ASSETS_DIR, filename)
+    if not os.path.exists(file_path):
+        return JSONResponse(status_code=404, content={"error": "File not found"})
+    
+    return FileResponse(file_path)
+
 app.state.bot = None
-from config import DB_PATH
 DASHBOARD_PIN = os.getenv("DASHBOARD_PIN", "7777")
 
 def is_authenticated(request: Request):
@@ -764,7 +777,7 @@ async def add_stock_api(item_id: int = Form(...), caption: str = Form(None), fil
     content = ""
     if file and file.filename:
         fname = f"stock_{item_id}_{int(time.time())}_{file.filename}"
-        fpath = os.path.join("assets", fname)
+        fpath = os.path.join(ASSETS_DIR, fname)
         with open(fpath, "wb") as f: f.write(await file.read())
         content = fpath
     async with aiosqlite.connect(DB_PATH) as db:
