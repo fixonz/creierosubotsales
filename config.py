@@ -12,3 +12,6 @@ LTC_ADDRESSES = [addr.strip() for addr in os.getenv("LTC_ADDRESSES", "").split("
 
 # Deposit timeout in minutes
 DEPOSIT_TIMEOUT_MINUTES = 30
+
+# SQLite Database path for persistence
+DB_PATH = os.getenv("DB_PATH", "bot_database.sqlite")

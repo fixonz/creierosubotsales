@@ -6,8 +6,8 @@ def main_menu() -> InlineKeyboardMarkup:
         [
             InlineKeyboardButton(text="👤 Profil", callback_data="menu_profile"),
             InlineKeyboardButton(text="💬 Suport", callback_data="menu_support")
-        ]
-
+        ],
+        [InlineKeyboardButton(text="⭐ Recenzii", callback_data="show_reviews_0")]
     ])
     return markup
 
@@ -26,8 +26,12 @@ def admin_main_menu() -> InlineKeyboardMarkup:
             InlineKeyboardButton(text="🧹 Golește Stoc", callback_data="admin_rem_stock")
         ],
         [
-            InlineKeyboardButton(text="📈 Istoric Vânzări", callback_data="admin_history"),
-            InlineKeyboardButton(text="⏳ Precomenzi", callback_data="admin_preorders")
+            InlineKeyboardButton(text="📈 Istoric", callback_data="admin_history"),
+            InlineKeyboardButton(text="⏳ Pending", callback_data="admin_pending")
+        ],
+        [
+            InlineKeyboardButton(text="⏳ Precomenzi", callback_data="admin_preorders"),
+            InlineKeyboardButton(text="💳 Adrese LTC", callback_data="admin_addresses")
         ],
         [InlineKeyboardButton(text="🔙 Ieșire", callback_data="menu_start")]
     ])

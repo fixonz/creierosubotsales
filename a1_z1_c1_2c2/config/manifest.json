@@ -1,0 +1,175 @@
+{
+    "bot_name": "New Simple Crypto Bot",
+    "currency": "RON",
+    "cities": [
+        {
+            "name": "București",
+            "image": "assets/bucuresti.jpg",
+            "categories": [
+                {
+                    "name": "❄️",
+                    "image": "assets/cat_snow.jpg",
+                    "description": "Super-flakey. Pentru zilele când vrei să fii fresh ca zăpada de munte.",
+                    "items": [
+                        {
+                            "name": "1X",
+                            "price_ron": 500
+                        },
+                        {
+                            "name": "2X",
+                            "price_ron": 900
+                        }
+                    ]
+                },
+                {
+                    "name": "🐎",
+                    "image": "assets/cat_horse.jpg",
+                    "description": "Putere de cal. Pentru zilele în care vrei să treci de usi...",
+                    "items": [
+                        {
+                            "name": "1X",
+                            "price_ron": 200
+                        },
+                        {
+                            "name": "2X",
+                            "price_ron": 300
+                        }
+                    ]
+                },
+                {
+                    "name": "☘️",
+                    "image": "assets/cat_weed.jpg",
+                    "description": "Verdura maximă, top gazon.. ca sa ai Creier fresh toată ziua!",
+                    "items": [
+                        {
+                            "name": "2X",
+                            "price_ron": 100
+                        },
+                        {
+                            "name": "5X",
+                            "price_ron": 200
+                        }
+                    ]
+                },
+                {
+                    "name": "🍾",
+                    "image": "assets/medalion.jpg",
+                    "description": "Vibrație de câștigător. Porți medeul, porți după tine.",
+                    "items": [
+                        {
+                            "name": "1X",
+                            "price_ron": 200
+                        },
+                        {
+                            "name": "2X",
+                            "price_ron": 300
+                        }
+                    ]
+                },
+                {
+                    "name": "🍬",
+                    "image": "assets/cat_candy.jpg",
+                    "description": "Dreamer Diamonds. Mica, impact uriaș.",
+                    "items": [
+                        {
+                            "name": "2X🍬",
+                            "price_ron": 100
+                        },
+                        {
+                            "name": "5X🍬",
+                            "price_ron": 200
+                        }
+                    ]
+                },
+                {
+                    "name": "🏃",
+                    "image": "assets/viteza.jpg",
+                    "description": "Turbo ON. Când ceilalți se trezesc, tu... dai in ele, continui.. si continui...",
+                    "items": [
+                        {
+                            "name": "1X",
+                            "price_ron": 100
+                        },
+                        {
+                            "name": "2X",
+                            "price_ron": 200
+                        }
+                    ]
+                },
+                {
+                    "name": "🍫",
+                    "image": "assets/shop.png",
+                    "description": "Chocolate: Gust intens, plăcere garantată.",
+                    "items": [
+                        {
+                            "name": "2X",
+                            "price_ron": 100
+                        },
+                        {
+                            "name": "5X",
+                            "price_ron": 225
+                        }
+                    ]
+                },
+                {
+                    "name": "🔮",
+                    "image": "assets/carton.jpg",
+                    "description": "Fara control, sudiaza-te...",
+                    "items": [
+                        {
+                            "name": "1X",
+                            "price_ron": 100
+                        },
+                        {
+                            "name": "5X",
+                            "price_ron": 400
+                        }
+                    ]
+                },
+                {
+                    "name": "💎",
+                    "image": "assets/cristi.jpg",
+                    "description": "Vezi în 4K. Decizii bune, prieteni mai putini, da altfel.",
+                    "items": [
+                        {
+                            "name": "1X",
+                            "price_ron": 200
+                        },
+                        {
+                            "name": "2X",
+                            "price_ron": 300
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Craiova",
+            "image": "assets/craiova.jpg",
+            "categories": [
+                {
+                    "name": "❄️",
+                    "image": "assets/cat_snow.jpg",
+                    "description": "Super-flakey. Craiova edition.",
+                    "items": [
+                        {
+                            "name": "1X",
+                            "price_ron": 500
+                        }
+                    ]
+                },
+                {
+                    "name": "☘️",
+                    "image": "assets/cat_weed.jpg",
+                    "description": "Verdura Craiova.",
+                    "items": [
+                        {
+                            "name": "2X",
+                            "price_ron": 100
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

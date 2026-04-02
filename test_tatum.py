@@ -9,8 +9,8 @@ async def test_api():
     timestamp = 1700000000
     
     print(f"Checking transaction for {address}...")
-    result = await check_ltc_transaction(address, amount, timestamp)
-    print(f"Result: {result}")
+    is_paid, confirmations, tx_hash, paid_amount, needs_review = await check_ltc_transaction(address, amount, timestamp)
+    print(f"Result: is_paid={is_paid}, confirmations={confirmations}, hash={tx_hash}, paid={paid_amount}, needs_review={needs_review}")
 
 if __name__ == "__main__":
     asyncio.run(test_api())
