@@ -22,12 +22,19 @@ RUN mkdir -p /app/data
 # Make sure the assets directory exists for uploads
 RUN mkdir -p /app/assets
 
-# Expose the dashboard port
-EXPOSE 8888
+# Expose the dashboard port (HF requires 7860)
+EXPOSE 7860
 
 # Set environment variables for production
 ENV PYTHONUNBUFFERED=1
-ENV PORT=8888
+ENV PORT=7860
+
+# Create a non-root user (User 1000 required for HF)
+RUN useradd -m -u 1000 user
+# Give the user permission to the data and assets folders
+RUN chown -R user:user /app
+USER user
+
 # Set DB_PATH to use the persistent volume
 ENV DB_PATH=/app/data/bot_database.sqlite
 
