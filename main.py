@@ -210,9 +210,40 @@ async def lifespan(app: FastAPI):
     if os.getenv("USE_SERVEO", "false").lower() == "true":
         tunnel_task = asyncio.create_task(run_serveo_tunnel(port))
     
+    # --- HEARTBEAT / KEEP-ALIVE ---
+    # Prevents free hosting (Render, Koyeb, etc.) from spinning down
+    async def keep_alive_heartbeat():
+        while True:
+            await asyncio.sleep(300) # Every 5 minutes
+            try:
+                import aiohttp
+                url = os.getenv("KEEP_ALIVE_URL")
+                if not url:
+                    # Try to fetch it from DB if it was a Serveo URL
+                    import aiosqlite
+                    from database import DB_PATH
+                    async with aiosqlite.connect(DB_PATH) as db:
+                        row = await (await db.execute("SELECT value FROM bot_settings WHERE key = 'dashboard_url'")).fetchone()
+                        if row: url = row[0]
+                
+                if url:
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(url) as resp:
+                            logging.debug(f"💓 Heartbeat sent to {url}: {resp.status}")
+                else:
+                    # Fallback to local ping to keep the process warm
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(f"http://localhost:{port}/") as resp:
+                            logging.debug(f"🏠 Local heartbeat: {resp.status}")
+            except Exception as e:
+                logging.debug(f"💔 Heartbeat failed: {e}")
+
+    heartbeat_task = asyncio.create_task(keep_alive_heartbeat())
+    
     yield
     # Cleanup
     bot_task.cancel()
+    heartbeat_task.cancel()
     if tunnel_task:
         tunnel_task.cancel()
     
