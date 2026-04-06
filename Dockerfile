@@ -22,12 +22,12 @@ RUN mkdir -p /app/data
 # Make sure the assets directory exists for uploads
 RUN mkdir -p /app/assets
 
-# Expose the dashboard port (HF requires 7860)
-EXPOSE 7860
+# Expose the dashboard port (Standard 8080)
+EXPOSE 8080
 
 # Set environment variables for production
 ENV PYTHONUNBUFFERED=1
-ENV PORT=7860
+ENV PORT=8080
 
 # Create a non-root user (User 1000 required for HF)
 RUN useradd -m -u 1000 user

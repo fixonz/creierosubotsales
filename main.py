@@ -204,7 +204,7 @@ async def lifespan(app: FastAPI):
     # Start the bot in the background when the web server starts
     bot_task = asyncio.create_task(start_bot())
     
-    port = int(os.getenv("PORT", 8888))
+    port = int(os.getenv("PORT", 8080))
     # Start the Serveo tunnel ONLY if not in production or explicitly requested
     tunnel_task = None
     if os.getenv("USE_SERVEO", "false").lower() == "true":
@@ -264,7 +264,7 @@ web_app.router.lifespan_context = lifespan
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     
-    port = int(os.getenv("PORT", 8888))
+    port = int(os.getenv("PORT", 8080))
     # Run the unified server
     logging.info(f"🌐 Dashboard available locally at http://localhost:{port}")
     uvicorn.run(web_app, host="0.0.0.0", port=port)
