@@ -696,7 +696,10 @@ async def cb_preorder(callback: CallbackQuery):
     if await check_and_show_pending(callback): return
 
     item_id = int(callback.data.split("_")[1])
-    user_tg_id = callback.from_user.id
+    user = callback.from_user
+    user_tg_id = user.id
+    full_name = user.full_name
+    username = f"@{user.username}" if user.username else "N/A"
     
     async with db_session() as db:
         async with db.cursor() as cursor:

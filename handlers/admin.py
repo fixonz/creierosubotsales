@@ -189,7 +189,25 @@ async def cmd_admin(message: Message):
     else:
         await message.answer(text, reply_markup=admin_main_menu())
 
-
+@router.callback_query(F.data == "admin_main")
+async def cb_admin_main(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+    from handlers.user import BOT_START_TIME
+    uptime = int(time.time() - BOT_START_TIME)
+    text = f"🛠 <b>Control Panel Administrator</b>\n⏱ Uptime: {uptime}s\n\n(Dacă vezi mai multe uptime-uri diferite când dai click, înseamnă că ai mai multe instanțe pornite!)"
+    img_path = "assets/admin.png"
+    
+    if os.path.exists(img_path):
+        if callback.message.photo:
+            try:
+                await callback.message.edit_media(media=InputMediaPhoto(media=FSInputFile(img_path), caption=text), reply_markup=admin_main_menu())
+            except: pass
+        else:
+            await callback.message.answer_photo(FSInputFile(img_path), caption=text, reply_markup=admin_main_menu())
+            await callback.message.delete()
+    else:
+        await smart_edit(callback.message, text, reply_markup=admin_main_menu())
+    await callback.answer()
 @router.callback_query(F.data.startswith("adm_preo_mgmt_"))
 async def cb_admin_preo_list(callback: CallbackQuery):
     if not is_admin(callback.from_user.id): return
