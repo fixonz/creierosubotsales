@@ -6,7 +6,7 @@ from utils.keyboards import admin_main_menu
 from config import ADMIN_IDS
 from aiogram.fsm.context import FSMContext
 from handlers.states import AdminCategory, AdminItem, AdminStock, AdminRemoval, AdminAddress, AdminPreorder, AdminReplyState
-from database import DB_PATH, is_silent_mode, set_silent_mode, get_last_completed_sales, restore_secret_and_delete_sale, get_item_stats, get_user_total_sales, is_blackmagic_on, set_blackmagic
+from database import DB_PATH, db_session, is_silent_mode, set_silent_mode, get_last_completed_sales, restore_secret_and_delete_sale, get_item_stats, get_user_total_sales, is_blackmagic_on, set_blackmagic
 from utils.image_cleaner import strip_exif
 from utils.ui import smart_edit
 import psycopg
@@ -789,7 +789,48 @@ async def cb_admin_addresses_link(callback: CallbackQuery):
     await cmd_check_slots(msg)
     await callback.answer()
 
+@router.callback_query(F.data == "admin_cats")
+async def cb_legacy_admin_cats(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+    await cb_admin_cats(callback)
+
+@router.callback_query(F.data == "admin_rem_cat")
+async def cb_legacy_admin_rem_cat(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+    await callback.answer("Pentru a șterge, selectează Categoria -> Șterge Categoria.", show_alert=True)
+    await cb_admin_cats(callback)
+
+@router.callback_query(F.data == "admin_items")
+async def cb_legacy_admin_items(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+    await callback.answer("Selectează o Categorie pentru a adăuga sau vedea Produsele ei.", show_alert=True)
+    await cb_admin_cats(callback)
+
+@router.callback_query(F.data == "admin_rem_item")
+async def cb_legacy_admin_rem_item(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+    await callback.answer("Pentru a șterge, intră la Categorie -> Produs -> Șterge.", show_alert=True)
+    await cb_admin_cats(callback)
+
+@router.callback_query(F.data == "admin_stock")
+async def cb_legacy_admin_stock(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+    await callback.answer("Pentru a adăuga stoc, intră la Categorie -> Produs -> Adaugă Stoc.", show_alert=True)
+    await cb_admin_cats(callback)
+
+@router.callback_query(F.data == "admin_rem_stock")
+async def cb_legacy_admin_rem_stock(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+    await callback.answer("Utilizează Funcția 'Șterge' de la produs pentru a-l goli.", show_alert=True)
+
+        
+@router.callback_query(F.data == "admin_history")
+async def cb_admin_history_bridge(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+    await cb_admin_stats_info(callback)
+
 @router.callback_query(F.data.startswith("adm_stats_"))
+
 async def cb_admin_stats(callback: CallbackQuery):
     if not is_admin(callback.from_user.id):
         return
