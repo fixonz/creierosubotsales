@@ -773,6 +773,22 @@ async def cb_admin_stats_info(callback: CallbackQuery):
     await cmd_admin_info(msg)
     await callback.answer()
 
+@router.callback_query(F.data == "adm_pending_link")
+async def cb_admin_pending_link(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+    msg = callback.message
+    msg.from_user = callback.from_user
+    await cmd_pending_orders(msg)
+    await callback.answer()
+
+@router.callback_query(F.data == "adm_addresses_link")
+async def cb_admin_addresses_link(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+    msg = callback.message
+    msg.from_user = callback.from_user
+    await cmd_check_slots(msg)
+    await callback.answer()
+
 @router.callback_query(F.data.startswith("adm_stats_"))
 async def cb_admin_stats(callback: CallbackQuery):
     if not is_admin(callback.from_user.id):

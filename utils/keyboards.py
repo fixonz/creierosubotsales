@@ -14,14 +14,15 @@ def main_menu() -> InlineKeyboardMarkup:
 def admin_main_menu() -> InlineKeyboardMarkup:
     markup = InlineKeyboardMarkup(inline_keyboard=[
         [
-            InlineKeyboardButton(text="📦 Gestiune Magazin (Cat/Prod/Stoc)", callback_data="adm_cats")
+            InlineKeyboardButton(text="📁 Categorii / Produse / Stoc", callback_data="adm_cats")
         ],
         [
-            InlineKeyboardButton(text="⏳ Precomenzi", callback_data="adm_preo_mgmt_0"),
-            InlineKeyboardButton(text="📈 Statistici & Vânzări", callback_data="adm_stats_info")
+            InlineKeyboardButton(text="📈 Statistici & Istoric", callback_data="adm_stats_info"),
+            InlineKeyboardButton(text="⏳ Pending", callback_data="adm_pending_link")
         ],
         [
-            InlineKeyboardButton(text="🔔 Setări Silent Mode", callback_data="admin_silent_mgmt")
+            InlineKeyboardButton(text="⏳ Precomenzi active", callback_data="adm_preo_mgmt_0"),
+            InlineKeyboardButton(text="💳 Adrese LTC Root", callback_data="adm_addresses_link")
         ],
         [InlineKeyboardButton(text="🔙 Ieșire", callback_data="menu_start")]
     ])
