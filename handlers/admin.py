@@ -764,6 +764,15 @@ async def cmd_admin_info(message: Message):
     except Exception as e:
         await message.answer(f"Eroare: {e}")
 
+@router.callback_query(F.data == "adm_stats_info")
+async def cb_admin_stats_info(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+    # Reuse cmd_admin_info logic but spoof the from_user for the permissions check inside the function
+    msg = callback.message
+    msg.from_user = callback.from_user
+    await cmd_admin_info(msg)
+    await callback.answer()
+
 @router.callback_query(F.data.startswith("adm_stats_"))
 async def cb_admin_stats(callback: CallbackQuery):
     if not is_admin(callback.from_user.id):
