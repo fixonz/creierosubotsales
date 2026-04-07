@@ -28,8 +28,8 @@ def is_admin(user_id: int) -> bool:
 # smart_edit removed, now using utils.ui.smart_edit
 
 @router.message(Command("check"))
-async def cmd_check_slots(message: Message):
-    if not is_admin(message.from_user.id): return
+async def cmd_check_slots(message: Message, auth_id: int = None):
+    if not is_admin(auth_id if auth_id is not None else message.from_user.id): return
     
     from datetime import datetime
     async with db_session() as db:
@@ -561,8 +561,8 @@ async def cb_admin_preo_final_action(callback: CallbackQuery):
         await callback.message.answer(f"❌ Precomandă #{preo_id} ștearsă/refuzată.")
 
 @router.message(Command("pending", prefix="!/"))
-async def cmd_pending_orders(message: Message):
-    if not is_admin(message.from_user.id):
+async def cmd_pending_orders(message: Message, auth_id: int = None):
+    if not is_admin(auth_id if auth_id is not None else message.from_user.id):
         return
         
     async with db_session() as db:
@@ -767,26 +767,19 @@ async def cmd_admin_info(message: Message):
 @router.callback_query(F.data == "adm_stats_info")
 async def cb_admin_stats_info(callback: CallbackQuery):
     if not is_admin(callback.from_user.id): return
-    # Reuse cmd_admin_info logic but spoof the from_user for the permissions check inside the function
-    msg = callback.message
-    msg.from_user = callback.from_user
-    await cmd_admin_info(msg)
+    await cmd_admin_info(callback.message, auth_id=callback.from_user.id)
     await callback.answer()
 
 @router.callback_query(F.data == "adm_pending_link")
 async def cb_admin_pending_link(callback: CallbackQuery):
     if not is_admin(callback.from_user.id): return
-    msg = callback.message
-    msg.from_user = callback.from_user
-    await cmd_pending_orders(msg)
+    await cmd_pending_orders(callback.message, auth_id=callback.from_user.id)
     await callback.answer()
 
 @router.callback_query(F.data == "adm_addresses_link")
 async def cb_admin_addresses_link(callback: CallbackQuery):
     if not is_admin(callback.from_user.id): return
-    msg = callback.message
-    msg.from_user = callback.from_user
-    await cmd_check_slots(msg)
+    await cmd_check_slots(callback.message, auth_id=callback.from_user.id)
     await callback.answer()
 
 @router.callback_query(F.data == "admin_cats")
@@ -1352,14 +1345,14 @@ async def cb_admin_items(callback: CallbackQuery):
     limit, offset = 10, page * 10
     async with db_session() as db:
         async with db.cursor() as cursor:
-            await cursor.execute("SELECT id, name, price FROM items WHERE category_id = %s ORDER BY id ASC LIMIT %s OFFSET %s", (cat_id, limit+1, offset))
+            await cursor.execute("SELECT id, name, price_ron FROM items WHERE category_id = %s ORDER BY id ASC LIMIT %s OFFSET %s", (cat_id, limit+1, offset))
             items = await cursor.fetchall()
             
     has_next = len(items) > limit
     items = items[:limit]
     text = f"📦 <b>Produse (Pag {page+1})</b>"
     kb = InlineKeyboardMarkup(inline_keyboard=[
-        *[[InlineKeyboardButton(text=f"{it['name']} ({it['price']} LTC)", callback_data=f"adm_item_view_{it['id']}")] for it in items],
+        *[[InlineKeyboardButton(text=f"{it['name']} ({it['price_ron']} RON)", callback_data=f"adm_item_view_{it['id']}")] for it in items],
         [InlineKeyboardButton(text="➕ Adaugă Produs", callback_data=f"adm_item_add_{cat_id}")],
         [InlineKeyboardButton(text="🔙 Înapoi", callback_data=f"adm_cat_view_{cat_id}")]
     ])
@@ -1382,7 +1375,7 @@ async def cb_admin_item_view(callback: CallbackQuery):
             stock_count = (stk['grp'] or 0) + (stk['sgl'] or 0)
             
     if not it: return await callback.answer("Nu există.")
-    text = f"📦 <b>{it['name']}</b>\nPreț: {it['price']} LTC\nStoc: {stock_count} pachete\nStatus: {'🕵️ Ascuns' if it['is_hidden'] else '👀 Vizibil'}"
+    text = f"📦 <b>{it['name']}</b>\nPreț: {it['price_ron']} RON\nStoc: {stock_count} pachete\nStatus: {'🕵️ Ascuns' if it['is_hidden'] else '👀 Vizibil'}"
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="➕ Adaugă Stoc", callback_data=f"adm_stock_add_{item_id}")],
         [InlineKeyboardButton(text="🗑️ Șterge", callback_data=f"adm_item_del_{item_id}")],
@@ -1400,7 +1393,8 @@ async def cb_admin_item_del(callback: CallbackQuery):
             await db.execute("DELETE FROM items WHERE id = %s", (item_id,))
             await db.commit()
     await callback.answer("Șters.")
-    if row: await cb_admin_items(callback.model_copy(update={"data": f"adm_items_{row['category_id']}_0"}))
+    if row:
+        await cb_admin_cat_view(callback.model_copy(update={'data': f"adm_cat_view_{row['category_id']}"}))
 
 # --- STOCK ---
 @router.callback_query(F.data.startswith("adm_stock_add_"))
