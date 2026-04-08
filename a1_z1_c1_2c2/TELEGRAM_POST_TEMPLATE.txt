@@ -1,0 +1,23 @@
+`🤖 **Noul Sub-Bot de Vânzări LTC v2.0 este ONLINE!** 🤖
+
+Suntem mândri să lansăm versiunea îmbunătățită a botului nostru de vânzări! Super rapid, sigur și complet automatizat.
+
+🌟 **Ce am adăugat:**
+✅ **Dual Language (RO / EN)** – Schimbă limba acum direct din secțiunea /profil!
+✅ **Plăți LTC Verificate** – Primești pachetul instant după doar 1 confirmare pe blockchain.
+✅ **Suport Multimedia** – Primești pachete complete cu poze, video și text (sub spoiler pentru discreție).
+✅ **Alerte de Stoc** – Te anunțăm automat imediat ce produsul tău preferat revine în stoc!
+✅ **Sistem de Recompenări & Recenzii** – Vezi ce spun alți clienți înainte să cumperi.
+
+🚀 **Comenzi Rapide:**
+📍 `/start` – Începe acum!
+👤 `/profile` – Verifică-ți statisticile și istoricul.
+🏘️ **Alege Orașul** – Navighează ușor prin cartiere și sectoare.
+
+🔒 **Securitate:**
+Plățile sunt procesate în blockchain-ul Litecoin, fără intermediari și fără conturi de business. 100% anonym și sigur.
+
+---
+🚀 **The Adventure Starts Here!** – Antigravity Bot Inventor
+---
+`

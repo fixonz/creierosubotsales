@@ -22,14 +22,22 @@ from handlers.admin import router as admin_router
 async def main():
     # Initialize the database
     await init_db()
-    # Seed fixed addresses from .env
-    await seed_addresses(LTC_ADDRESSES)
+    
+    from database import ensure_5_slots
+    await ensure_5_slots()
     
     dp.include_router(admin_router)
     dp.include_router(user_router)
+
+    # Fixed global error handler signature for aiogram 3.x
+    @dp.errors()
+    async def global_error_handler(event):
+        logging.error(f"Global Update Error: {event.exception}")
+        return True # Swallow exception to keep bot alive
     
     # Start polling
     logging.info("Starting bot...")
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":

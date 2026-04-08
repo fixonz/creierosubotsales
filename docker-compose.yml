@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    container_name: creierosu-bot
+    restart: always
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./data:/app/data
+      - ./assets:/app/assets
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PORT=8888
+      - DB_PATH=/app/data/bot_database.sqlite
+      # Those below should be in .env but we define defaults or overrides here
+      - USE_SERVEO=false
+    env_file:
+      - .env

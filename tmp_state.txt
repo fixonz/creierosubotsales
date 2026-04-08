@@ -1,0 +1,8 @@
+await state.set_state(AdminPreorder.waiting_for_time)
+@router.message(AdminPreorder.waiting_for_time)
+await state.set_state(AdminStock.waiting_for_bundle)
+@router.message(AdminStock.waiting_for_bundle)
+await state.set_state(AdminAddress.waiting_for_address)
+@router.message(AdminAddress.waiting_for_address)
+await state.set_state(AdminReplyState.waiting_for_reply)
+@router.message(AdminReplyState.waiting_for_reply)

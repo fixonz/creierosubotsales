@@ -2,12 +2,12 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 def main_menu() -> InlineKeyboardMarkup:
     markup = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🛒 Magazin", callback_data="menu_shop")],
+        [InlineKeyboardButton(text="🛒 MAGAZIN", callback_data="menu_shop")],
         [
-            InlineKeyboardButton(text="👤 Profil", callback_data="menu_profile"),
-            InlineKeyboardButton(text="💬 Suport", callback_data="menu_support")
-        ]
-
+            InlineKeyboardButton(text="👤 PROFIL", callback_data="menu_profile"),
+            InlineKeyboardButton(text="💬 SUPORT", callback_data="menu_support")
+        ],
+        [InlineKeyboardButton(text="⭐ RECENZII", callback_data="show_reviews_0")]
     ])
     return markup
 
@@ -26,8 +26,12 @@ def admin_main_menu() -> InlineKeyboardMarkup:
             InlineKeyboardButton(text="🧹 Golește Stoc", callback_data="admin_rem_stock")
         ],
         [
-            InlineKeyboardButton(text="📈 Istoric Vânzări", callback_data="admin_history"),
-            InlineKeyboardButton(text="⏳ Precomenzi", callback_data="admin_preorders")
+            InlineKeyboardButton(text="📈 Istoric", callback_data="admin_history"),
+            InlineKeyboardButton(text="⏳ Pending", callback_data="adm_pending_link")
+        ],
+        [
+            InlineKeyboardButton(text="⏳ Precomenzi", callback_data="adm_preo_mgmt_0"),
+            InlineKeyboardButton(text="💳 Adrese LTC", callback_data="adm_addresses_link")
         ],
         [InlineKeyboardButton(text="🔙 Ieșire", callback_data="menu_start")]
     ])

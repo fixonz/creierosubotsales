@@ -1,37 +1,53 @@
-# Deployment Guide for Railway
+# ⚡ Creierosu Deployment Guide (WSL + Railway)
 
-To run your bot automatically 24/7 on Railway, follow these steps:
+This guide will help you get your bot online 24/7 using **WSL (Windows Subsystem for Linux)** and **Railway.app**.
 
-## 1. Prepare your GitHub Repository
-1. Initialize a git repository if you haven't:
+## 1. Prepare your Repository using WSL
+Open your WSL terminal (e.g., Ubuntu) and follow these steps:
+
+1. **Navigate to your project folder:**
+   ```bash
+   cd /mnt/c/Users/fixxZ/Downloads/creierosubotsales
+   ```
+
+2. **Initialize Git & Push to GitHub:**
    ```bash
    git init
    git add .
-   git commit -m "Initial commit for Railway"
+   git commit -m "Production ready deployment"
+   # Create a new private repo on GitHub, then:
+   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+   git branch -M main
+   git push -u origin main
    ```
-2. Create a new repository on GitHub and push your code there.
-   *Note: My `.gitignore` will prevent your `.env` and `.sqlite` files from being uploaded, which is necessary for security.*
 
 ## 2. Deploy to Railway
 1. Go to [Railway.app](https://railway.app/) and log in.
 2. Click **+ New Project** -> **Deploy from GitHub repo**.
 3. Select your repository.
-4. Click **Add Variables** and copy the values from your local `.env` file:
-   - `BOT_TOKEN`
-   - `ADMIN_IDS`
+4. **Variables (CRITICAL):**
+   Go to the **Variables** tab and add everything from your `.env`:
+   - `BOT_TOKEN` (Your Telegram Bot Token)
+   - `ADMIN_IDS` (Comma separated IDs)
    - `TATUM_API_KEY`
-   - `LTC_ADDRESSES`
+   - `LTC_ADDRESSES` (5 comma separated addresses)
+   - `DB_PATH` = `/app/data/bot_database.sqlite` (This is mandatory!)
 
-## 3. Important: Data Persistence (SQLite)
-Railway uses an ephemeral file system by default. This means your database (`bot_database.sqlite`) will be **reset** every time the bot restarts or you push an update.
+## 3. Persistent Database (Don't skip this!)
+Railway resets the file system on every restart unless you add a Volume.
+1. In your Railway service, go to **Settings**.
+2. Scroll to **Volumes** -> **+ Add Volume**.
+3. Set the **Mount Path** to `/app/data`.
+4. Click **Add Volume**.
+5. Your bot will now remember items, categories, and sales even after a restart!
 
-**To fix this:**
-1. In Railway, go to your project settings.
-2. Click **Add Service** -> **Volume**.
-3. Mount the volume to `/app/data` (or similar).
-4. Update `database.py` to point to the volume path.
+## 4. Dashboard Access
+- Railway will provide a public URL (e.g., `https://bot-production-xxx.railway.app`).
+- You can access your admin dashboard there.
+- **Tip:** You no longer need the `/link` command or Serveo. Your URL is now permanent!
 
-*Alternatively, consider moving to a managed PostgreSQL database on Railway for better reliability.*
-
-## 4. Why did the bot crash earlier?
-The error `terminated by other getUpdates request` means you had **two copies** of the bot running at the same time with the same token. Telegram only allows one at a time. Before starting the bot on Railway, make sure you close the one running on your computer.
+## 5. Why it won't "fall" again:
+- **Auto-Restart:** If the bot crashes, Railway automatically restarts it.
+- **Dockerized:** The `Dockerfile` ensures it runs in a perfect environment.
+- **Persistent Storage:** Your SQLite database is safe on the Railway Volume.
+- **No Serveo:** We use Railway's built-in networking which is much more stable than SSH tunnels.
